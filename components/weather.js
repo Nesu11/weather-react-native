@@ -17,7 +17,7 @@ const Weather = ({ weather, temperature }) => {
         </View>
         <View style={styles.bodyContainer}> 
         <Text style={styles.title}>So Sunny</Text>
-        <Text style={styles.subtitle}>{this.props.detail.weather[0].description}</Text>
+        <Text style={styles.subtitle}>It hurts my eyes!</Text>
         </View>
       </View>
     );

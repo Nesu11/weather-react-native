@@ -6,24 +6,18 @@ import Weather from './components/weather';
 const  Weather_API_Key = 'd4c0774c52765d8f79bf748fe0a1eebc'
 
 export default class App extends React.Component {
-  constructor(props){
-    super(props)
-  
   state = {
     isLoading: true,
-    latitude: 0,
-    longitude: 0,
-    forecast: [],
-    error: null,
+    temperature: 0,
+    weatherCondition: null,
+    error: null
   };
-
-}
 
   componentDidMount() {
     //current location of user
     navigator.geolocation.getCurrentPosition(
       position => {
-        this.getWeather(position.coords.latitude, position.coords.longitude);
+        this.fetchWeather(position.coords.latitude, position.coords.longitude);
       },
       error => {
         this.setState({
@@ -33,7 +27,7 @@ export default class App extends React.Component {
     );
   }
 
-  getWeather(lat, lon) {
+  fetchWeather(lat, lon) {
     fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${Weather_API_Key}&units=metric`
     )
