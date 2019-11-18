@@ -1,74 +1,73 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { Alert, StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import Lottie from 'lottie-react-native'
 import Weather from './components/weather';
+import ForecastCard from './components/forecastCard';
+import Constants from 'expo-constants';
 
 const  Weather_API_Key = 'd4c0774c52765d8f79bf748fe0a1eebc'
 
 export default class App extends React.Component {
   state = {
     isLoading: true,
-    temperature: 0,
-    weatherCondition: null,
-    error: null
+    forecast: [],
+    location: null,
+    error: null,
+    
   };
 
   componentDidMount() {
-    //current location of user
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.fetchWeather(position.coords.latitude, position.coords.longitude);
-      },
-      error => {
-        this.setState({
-          error: 'Forecast Unavailable'
-        });
-      }
-    );
+    this.getLocation();
   }
+
+  getLocation = () => {
+		navigator.geolocation.getCurrentPosition(
+			position => {
+				const location = JSON.stringify(position);
+
+				this.setState({ location }), () => { this.fetchWeather() };
+			},
+			error => this.setState({forecast: error.message }),
+			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		);
+	};
 
   fetchWeather(lat, lon) {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${Weather_API_Key}&units=metric`
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&APPID=${Weather_API_Key}&units=metric`
     )
       .then(res => res.json())
-      .then(json => {
+      .then(data => {
         this.setState({
-          temperature: json.main.temp,
-          weatherCondition: json.weather[0].main,
-          isLoading: false
+          forecast:data
         });
       });
   }
-
-  render() {
-    const { isLoading, weatherCondition, temperature } = this.state;
-    return (
-      <View style={styles.container}>
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>Loading Weather Forecast...</Text>
+	render() {
+		return (
+			<SafeAreaView style={styles.container}>
+				<TouchableOpacity onPress={this.getLocation}>
+          <View>
+					<Text style={styles.welcome}>Find My Location</Text>
           </View>
-        ) : (
-          <Weather weather={weatherCondition} temperature={temperature} />
-        )}
-      </View>
-    );
-  }
+				<FlatList data={this.state.forecast.list} style={{marginTop:20}} keyExtractor={item => item.dt_txt} renderItem={({item}) => <ForecastCard detail={item} location={this.state.forecast.city.name} />} />
+				</TouchableOpacity>
+			</SafeAreaView>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'whitesmoke'
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+    marginTop: Constants.statusBarHeight,
+	},
+	welcome: {
+		fontSize: 20,
+		textAlign: 'center',
+		margin: 10
   },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'green'
-  },
-  loadingText: {
-    fontSize: 30
-  }
-});
+})

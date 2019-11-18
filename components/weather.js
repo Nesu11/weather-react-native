@@ -2,40 +2,26 @@ import React, {Component} from 'react';
 import {StyleSheet, Image, View } from 'react-native';
 import { Text, Card, Divider } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-//import { weatherConditions } from './weatherConditions'
+import { weatherConditions } from './weatherConditions'
 import PropTypes from 'prop-types';
 
-const Weather = (props) => {
+const Weather = ({ weather, temperature, description }) => {
     return (
-    <Card containerStyle={styles.card}>
-        <Text style={styles.notes}>{props.location}</Text>
-        <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
-				
-				</View>
-
-            <Divider style={{ backgroundColor: '#dfe6e9', marginVertical:20}} />
-
-
-            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-        <View style={
-            styles.weatherContainer
-            }>
-               
-            
-
+        
+      <View style={[
+          styles.weatherContainer,
+          { backgroundColor: weatherConditions[weather].color }
+          ]}>
         <View style={styles.headerContainer} > 
-             <MaterialCommunityIcons size={72} name={props.icon} color={'#fff'} />
-             <Text style={styles.tempText}>{props.temperature}˚C
-             </Text>
+        <MaterialCommunityIcons size={48} name={weatherConditions[weather].icon} color={'#fff'} />
+<Text style={styles.tempText}>{Math.round(temperature)}˚C</Text>
         </View>
         <View style={styles.bodyContainer}> 
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.subtitle}>{props.description}</Text>
+        <Text style={styles.title}>So Sunny</Text>
+        <Text style={styles.subtitle}>It hurts my eyes!</Text>
         </View>
-       </View>
-       </View>
-
-    </Card>
+      </View>
+     
     );
   };
 
@@ -45,12 +31,11 @@ const Weather = (props) => {
   };
   
   const styles = StyleSheet.create({
-    card:{
-		backgroundColor:'rgba(56, 172, 236, 1)',
-		borderWidth:0,
-		borderRadius:20
+        
+    weatherContainer: {
+      flex: 1,
+      backgroundColor: '#f7b733'
     },
-
 
     headerContainer: {
         flex: 1,
@@ -77,6 +62,7 @@ const Weather = (props) => {
         fontSize: 24,
         color: '#fff'
       }
+    
   });
   
   export default Weather;
