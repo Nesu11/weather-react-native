@@ -1,7 +1,5 @@
 import React from 'react';
 import { Alert, StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
-import Lottie from 'lottie-react-native'
-import Weather from './components/weather';
 import ForecastCard from './components/forecastCard';
 import Constants from 'expo-constants';
 
@@ -44,16 +42,19 @@ export default class App extends React.Component {
       });
   }
 	render() {
-		return (
-			<SafeAreaView style={styles.container}>
-				<TouchableOpacity onPress={this.getLocation}>
-          <View>
-					<Text style={styles.welcome}>Find My Location</Text>
+    const { isLoading, forecast, location} = this.state;
+    return (
+      <View style={styles.container}>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Loading Weather Forecast...</Text>
           </View>
-				<FlatList data={this.state.forecast.list} style={{marginTop:20}} keyExtractor={item => item.dt_txt} renderItem={({item}) => <ForecastCard detail={item} location={this.state.forecast.city.name} />} />
-				</TouchableOpacity>
-			</SafeAreaView>
-		);
+        ) : (
+          <FlatList data={forecast.list} style={{marginTop:20}} keyExtractor={item => item.dt_txt} renderItem={({item}) => <ForecastCard detail={item} location={this.state.forecast.city.name} />} />
+        )}
+      </View>
+    );
+
 	}
 }
 
