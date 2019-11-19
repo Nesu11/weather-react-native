@@ -10,13 +10,13 @@ export default class ForecastCard extends Component {
 
 		return (
 			<View>
-				<Text style={styles.notes}>{this.props.location}</Text>
+				<Text style={styles.details}>{this.props.location}</Text>
 
 				<Divider style={{ backgroundColor: '#dfe6e9', marginVertical:20}} />
 				
 				<View style={{flexDirection:'row', justifyContent:'space-between'}}>
-					<Text style={styles.notes}>{this.props.detail.weather[0].description}</Text>
-					<Text style={styles.notes}>{Math.round( this.props.detail.main.temp)};</Text>
+					<Text style={styles.details}>{this.props.detail.weather[0].description}</Text>
+					<Text style={styles.details}>{Math.round( this.props.detail.main.temp)}˚C</Text>
 				</View>
 			</View>
 			
@@ -26,17 +26,13 @@ export default class ForecastCard extends Component {
 
 const styles = StyleSheet.create({
 	card:{
-		backgroundColor:'rgba(56, 172, 236, 1)',
+		backgroundColor:'#38acec',
 		borderWidth:0,
 		borderRadius:20
 	},
-	time:{
-		fontSize:38,
-		color:'#fff'
-	},
-	notes: {
+	
+	details: {
 		fontSize: 18,
 		color:'#fff',
-		textTransform:'capitalize'
 	}
 });
