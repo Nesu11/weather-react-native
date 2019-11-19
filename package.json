@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "enzyme": "^3.10.0",
     "expo": "^35.0.0",
     "lottie-react-native": "~2.6.1",
     "moment": "^2.24.0",
